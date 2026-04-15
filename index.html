@@ -28,7 +28,7 @@ Program name: index.html
 Author: Gabriel Lopez
 Date created: 4/15/2026
 Date last edited: 4/15/2026
-Version: 1.2
+Version: 1.3
 Description: Cross Physical Therapy Patient Registration Form where you are filling out information for the company to better suit your needs
 -->
 
@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <!--  BUTTONS -->
         <div class="section">
         <input type="reset" value="Reset">
-        <input type="submit" value="Submit">
+        <input type="button" id="validateBtn" value="Validate">
         </div>
 
       </form>
@@ -488,7 +488,10 @@ document.addEventListener('DOMContentLoaded', () => {
             isValid = false;
           }
 
-          const email = document.getElementById('email').value;
+          // Force email to lowercase and validate
+          const emailField = document.getElementById('email');
+          let email = emailField.value.toLowerCase();
+          emailField.value = email;
           const emailErr = validateEmail(email);
           if (emailErr) {
             displayError('email', emailErr);
@@ -499,6 +502,55 @@ document.addEventListener('DOMContentLoaded', () => {
           const phoneErr = validatePhone(phone);
           if (phoneErr) {
             displayError('phone', phoneErr);
+            isValid = false;
+          }
+
+          const addr1 = document.getElementById('addr1').value;
+          const addr1Err = validateAddress(addr1, 1);
+          if (addr1Err) {
+            displayError('addr1', addr1Err);
+            isValid = false;
+          }
+
+          const addr2 = document.getElementById('addr2').value;
+          const addr2Err = validateAddress(addr2, 2);
+          if (addr2Err) {
+            displayError('addr2', addr2Err);
+            isValid = false;
+          }
+
+          const city = document.getElementById('city').value;
+          const cityErr = validateCity(city);
+          if (cityErr) {
+            displayError('city', cityErr);
+            isValid = false;
+          }
+
+          const state = document.getElementById('state').value;
+          const stateErr = validateState(state);
+          if (stateErr) {
+            displayError('state', stateErr);
+            isValid = false;
+          }
+
+          const zip = document.getElementById('zip').value;
+          const zipErr = validateZip(zip);
+          if (zipErr) {
+            displayError('zip', zipErr);
+            isValid = false;
+          }
+
+          const notes = document.getElementById('notes').value;
+          const notesErr = validateNotes(notes);
+          if (notesErr) {
+            displayError('notes', notesErr);
+            isValid = false;
+          }
+
+          const userId = document.getElementById('userId').value;
+          const userIdErr = validateUserId(userId);
+          if (userIdErr) {
+            displayError('userId', userIdErr);
             isValid = false;
           }
 
@@ -516,92 +568,85 @@ document.addEventListener('DOMContentLoaded', () => {
             isValid = false;
           }
 
+          // Validate vaccination status
+          const vaccinated = document.querySelector('input[name="vaccinated"]:checked');
+          const vaccinatedErr = validateVaccinated(vaccinated ? vaccinated.value : '');
+          if (vaccinatedErr) {
+            const vaccinatedGroup = document.querySelector('input[name="vaccinated"]').closest('.group');
+            const errorEl = vaccinatedGroup.querySelector('.error') || document.createElement('div');
+            if (!vaccinatedGroup.querySelector('.error')) {
+              errorEl.className = 'error';
+              vaccinatedGroup.appendChild(errorEl);
+            }
+            errorEl.textContent = vaccinatedErr;
+            errorEl.style.color = '#b30000';
+            errorEl.style.fontWeight = 'bold';
+            errorEl.style.marginTop = '5px';
+            isValid = false;
+          }
+
+          // Validate housing status
+          const housing = document.querySelector('input[name="housing"]:checked');
+          const housingErr = validateHousing(housing ? housing.value : '');
+          if (housingErr) {
+            const housingGroup = document.querySelector('input[name="housing"]').closest('.group');
+            const errorEl = housingGroup.querySelector('.error') || document.createElement('div');
+            if (!housingGroup.querySelector('.error')) {
+              errorEl.className = 'error';
+              housingGroup.appendChild(errorEl);
+            }
+            errorEl.textContent = housingErr;
+            errorEl.style.color = '#b30000';
+            errorEl.style.fontWeight = 'bold';
+            errorEl.style.marginTop = '5px';
+            isValid = false;
+          }
+
           return isValid;
         }
 
-        document.getElementById('regForm').addEventListener('submit', function(e) {
-          e.preventDefault();
-          
-          // Validate all fields
-          if (!validateForm()) {
-            return;
-          }
-          
-          // Collect all form data
-          const formData = new FormData(this);
-          const summary = {};
-          
-          // Get field labels for better readability
-          const labels = {
-            firstName: 'First Name',
-            middleInitial: 'Middle Initial',
-            lastName: 'Last Name',
-            birthday: 'Birthday',
-            moveDate: 'Move-in / Travel Date',
-            ssn: 'Social Security #',
-            email: 'Email',
-            phone: 'Phone',
-            addr1: 'Address Line 1',
-            addr2: 'Address Line 2',
-            city: 'City',
-            state: 'State',
-            zip: 'Zip Code',
-            notes: 'Notes',
-            userId: 'Desired User ID',
-            password: 'Password',
-            vaccinated: 'Vaccinated?',
-            housing: 'Housing'
-          };
-          
-          // Process form entries
+        // Retrieve all form data into an object
+        function getFormData() {
+          const form = document.getElementById('regForm');
+          const formData = new FormData(form);
+          const data = {};
+
+          // Get all input values
           for (let [key, value] of formData.entries()) {
             if (key === 'history') {
-              // Handle medical history checkboxes
-              if (!summary['Medical History']) {
-                summary['Medical History'] = [];
+              if (!data['history']) {
+                data['history'] = [];
               }
-              summary['Medical History'].push(value);
-            } else if (key !== 'confirmPassword' && labels[key]) {
-              summary[labels[key]] = value;
-            }
-          }
-          
-          // Format and display summary
-          let summaryHTML = '<dl style="display: grid; grid-template-columns: 200px 1fr; gap: 15px;">';
-          
-          for (let [label, value] of Object.entries(summary)) {
-            if (Array.isArray(value)) {
-              summaryHTML += `<dt><strong>${label}:</strong></dt><dd>${value.join(', ')}</dd>`;
+              data['history'].push(value);
+            } else if (key === 'vaccinated' || key === 'housing') {
+              data[key] = value;
             } else {
-              summaryHTML += `<dt><strong>${label}:</strong></dt><dd>${value || '(not provided)'}</dd>`;
+              data[key] = value;
             }
           }
-          
-          summaryHTML += '</dl>';
-          
-          document.getElementById('summary-content').innerHTML = summaryHTML;
-          document.getElementById('summary-section').style.display = 'block';
-          
-          // Summary scroll
-          document.getElementById('summary-section').scrollIntoView({ behavior: 'smooth' });
-          
-          // Add event listener to confirm submission button
-          document.getElementById('confirm-submit-btn').addEventListener('click', function() {
-            // Show success message
-            const confirmBtn = this;
-            confirmBtn.textContent = '✓ Submission Received';
-            confirmBtn.style.backgroundColor = '#28a745';
-            confirmBtn.style.cursor = 'not-allowed';
-            confirmBtn.disabled = true;
-            
-            setTimeout(() => {
-              document.getElementById('summary-section').style.display = 'none';
-              document.getElementById('regForm').reset();
-              clearErrors();
-              alert('Thank you! Your registration has been submitted successfully.');
-              window.location.href = 'index.html';
-            }, 2000);
-          });
+
+          return data;
+        }
+
+        // Add click event to VALIDATE button
+        document.addEventListener('DOMContentLoaded', function() {
+          const validateBtn = document.getElementById('validateBtn');
+          if (validateBtn) {
+            validateBtn.addEventListener('click', function() {
+              // Validate all fields
+              if (!validateForm()) {
+                console.log('Validation failed');
+                return;
+              }
+
+              // Get all form data
+              const formData = getFormData();
+              console.log('Form Data Retrieved:', formData);
+              
+              // Display success message
+              alert('✓ Validation Successful! All fields have been validated and data retrieved.');
+            });
+          }
         });
 
         // Initialize on page load
