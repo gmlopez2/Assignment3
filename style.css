@@ -113,3 +113,18 @@ label {
 
 }
 
+/* Error Messages */
+.error {
+  display: block;
+  margin-top: 5px;
+  padding: 8px;
+  background-color: #ffe6e6;
+  border-left: 4px solid #b30000;
+  border-radius: 3px;
+  font-size: 0.95em;
+  min-height: 20px;
+  color: #b30000;
+  font-weight: bold;
+  visibility: hidden;
+}
+

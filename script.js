@@ -66,7 +66,7 @@ function displayError(fieldId, message) {
   const errorEl = document.getElementById(fieldId + 'Err');
   if (errorEl) {
     errorEl.textContent = message;
-    errorEl.style.display = message ? 'block' : 'none';
+    errorEl.style.visibility = message ? 'visible' : 'hidden';
   }
 }
 
