@@ -1,26 +1,26 @@
-// Validation rules configuration
+// Validation rules for each field
 const validationRules = {
-  firstName: { required: true, pattern: /^[A-Za-z'\-]{1,30}$/, msg: "Letters, apostrophes, dashes only (1-30 chars)" },
-  middleInitial: { required: false, pattern: /^[A-Za-z]?$/, msg: "Single letter only" },
-  lastName: { required: true, pattern: /^[A-Za-z'\-]*[2-5]?[A-Za-z'\-]*$/, msg: "Letters, apostrophes, dashes, numbers 2-5" },
-  birthday: { required: true, type: "date", msg: "Date required and valid" },
-  moveDate: { required: false, type: "date", msg: "Cannot be in the past" },
-  ssn: { required: false, pattern: /^\d{3}-\d{3}-\d{4}$/, msg: "Format: XXX-XX-XXXX" },
-  email: { required: true, type: "email", msg: "Valid email required (name@domain.tld)" },
-  phone: { required: false, pattern: /^\d{3}-\d{3}-\d{4}$/, msg: "Format: 000-000-0000" },
-  addr1: { required: true, minLength: 2, maxLength: 30, msg: "2-30 characters required" },
-  addr2: { required: false, minLength: 2, maxLength: 30, msg: "2-30 characters if provided" },
-  city: { required: true, minLength: 2, maxLength: 30, msg: "2-30 characters required" },
-  state: { required: true, msg: "State required" },
-  zip: { required: true, pattern: /^\d{5}(-\d{4})?$/, msg: "5 digits or ZIP+4 format" },
-  notes: { required: false, noDoubleQuotes: true, msg: "No double quotes allowed" },
-  userId: { required: true, pattern: /^[A-Za-z][A-Za-z0-9_-]{4,29}$/, msg: "Start with letter, 5-30 chars, letters/numbers/dash/underscore" },
-  password: { required: true, password: true, msg: "8-30 chars with uppercase, lowercase, digit, special char" },
+  firstName:       { required: true, pattern: /^[A-Za-z'\-]{1,30}$/, msg: "Letters, apostrophes, dashes only (1-30 chars)" },
+  middleInitial:   { required: false, pattern: /^[A-Za-z]?$/, msg: "Single letter only" },
+  lastName:        { required: true, pattern: /^[A-Za-z'\-]*[2-5]?[A-Za-z'\-]*$/, msg: "Letters, apostrophes, dashes, numbers 2-5" },
+  birthday:        { required: true, type: "date", msg: "Date required and valid" },
+  moveDate:        { required: false, type: "date", msg: "Cannot be in the past" },
+  ssn:             { required: false, pattern: /^\d{3}-\d{3}-\d{4}$/, msg: "Format: XXX-XX-XXXX" },
+  email:           { required: true, type: "email", msg: "Valid email required (name@domain.tld)" },
+  phone:           { required: false, pattern: /^\d{3}-\d{3}-\d{4}$/, msg: "Format: 000-000-0000" },
+  addr1:           { required: true, minLength: 2, maxLength: 30, msg: "2-30 characters required" },
+  addr2:           { required: false, minLength: 2, maxLength: 30, msg: "2-30 characters if provided" },
+  city:            { required: true, minLength: 2, maxLength: 30, msg: "2-30 characters required" },
+  state:           { required: true, msg: "State required" },
+  zip:             { required: true, pattern: /^\d{5}(-\d{4})?$/, msg: "5 digits or ZIP+4 format" },
+  notes:           { required: false, noDoubleQuotes: true, msg: "No double quotes allowed" },
+  userId:          { required: true, pattern: /^[A-Za-z][A-Za-z0-9_-]{4,29}$/, msg: "Start with letter, 5-30 chars, letters/numbers/dash/underscore" },
+  password:        { required: true, password: true, msg: "8-30 chars with uppercase, lowercase, digit, special char" },
   confirmPassword: { required: true, msg: "Must match password" }
 };
 
 
-// Generic validation function
+//  validation function
 function validate(fieldId, value, rules) {
   if (!rules) return "";
   if (!value && rules.required) return `${fieldId.replace(/([A-Z])/g, ' $1').trim()} is required`;
@@ -67,6 +67,7 @@ function displayError(fieldId, message) {
   if (errorEl) {
     errorEl.textContent = message;
     errorEl.style.visibility = message ? 'visible' : 'hidden';
+    errorEl.style.color = '#b30000';
   }
 }
 
