@@ -5,7 +5,7 @@ const validationRules = {
   lastName:        { required: true, pattern: /^[A-Za-z'\-]*[2-5]?[A-Za-z'\-]*$/, msg: "Letters, apostrophes, dashes, numbers 2-5" },
   birthday:        { required: true, type: "date", msg: "Date required and valid" },
   moveDate:        { required: false, type: "date", msg: "Cannot be in the past" },
-  ssn:             { required: false, pattern: /^\d{3}-\d{3}-\d{4}$/, msg: "Format: XXX-XX-XXXX" },
+  ssn:             { required: false, pattern: /^\d{3}-\d{2}-\d{4}$/, msg: "Format: XXX-XX-XXXX" },
   email:           { required: true, type: "email", msg: "Valid email required (name@domain.tld)" },
   phone:           { required: false, pattern: /^\d{3}-\d{3}-\d{4}$/, msg: "Format: 000-000-0000" },
   addr1:           { required: true, minLength: 2, maxLength: 30, msg: "2-30 characters required" },
