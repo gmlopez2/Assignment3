@@ -38,7 +38,7 @@ function validate(fieldId, value, rules) {
     if (dateVal > today) return "Cannot be in the future";
     if (fieldId === "birthday") {
       const age = today.getFullYear() - dateVal.getFullYear();
-      if (age > 120) return "Age cannot exceed 120 years";
+      if (age > 120) return "Age cannot exceed 120 years, you would be dead.";
     }
     if (fieldId === "moveDate" && dateVal < today) return "Cannot be in the past";
   }
