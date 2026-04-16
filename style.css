@@ -93,17 +93,6 @@ input[type="reset"]:hover {
   border-top: 4px solid #b30000;   /* Red border */
 }
 
-/* Links */
-a {
-  color: #b30000;                  /* Red */
-  font-weight: bold;
-  text-decoration: none;
-}
-
-a:visited {
-  color: #000000;                  /* Black when visited */
-}
-
 /* Labels */
 label {
   display: inline-block;
