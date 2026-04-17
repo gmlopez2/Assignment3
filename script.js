@@ -35,7 +35,7 @@ function validate(fieldId, value, rules) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const dateVal = new Date(value + 'T00:00:00');
-    if (dateVal > today) return "Cannot be in the future";
+    if (dateVal > today && fieldId !== "moveDate") return "Cannot be in the future";
     if (fieldId === "birthday") {
       const age = today.getFullYear() - dateVal.getFullYear();
       if (age > 120) return "Age cannot exceed 120 years, you would be dead.";
@@ -155,11 +155,25 @@ function getFormData() {
 // Display form summary
 function displayFormSummary(formData) {
   const labels = {
-    firstName: 'First Name', middleInitial: 'Middle Initial', lastName: 'Last Name',
-    birthday: 'Birthday', moveDate: 'Move In Date', ssn: 'SSN', email: 'Email',
-    phone: 'Phone', addr1: 'Address Line 1', addr2: 'Address Line 2', city: 'City',
-    state: 'State', zip: 'Zip', history: 'Medical History', vaccinated: 'Vaccinated',
-    housing: 'Housing', salary: 'Salary Range', notes: 'Notes', userId: 'User ID'
+    firstName: 'First Name',
+    middleInitial: 'Middle Initial', 
+    lastName: 'Last Name',
+    birthday: 'Birthday', 
+    moveDate: 'Move In Date', 
+    ssn: 'SSN', 
+    email: 'Email',
+    phone: 'Phone', 
+    addr1: 'Address Line 1', 
+    addr2: 'Address Line 2', 
+    city: 'City',
+    state: 'State', 
+    zip: 'Zip', 
+    history: 'Medical History', 
+    vaccinated: 'Vaccinated',
+    housing: 'Housing', 
+    salary: 'Salary Range', 
+    notes: 'Notes', 
+    userId: 'User ID'
   };
 
   let html = '<table style="width: 100%; border-collapse: collapse;">';
