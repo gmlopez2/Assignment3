@@ -3,9 +3,15 @@ Program name: index.html
 Author: Gabriel Lopez
 Date created: 4/15/2026
 Date last edited: 4/17/2026
-Version: 1.9
+Version: 2.0
 Description: Adding more information to my website through "validation.js" and "styles.css". This is a patient registration form.
 It includes various input fields for personal information, contact details, address, medical history, and credentials. 
+
+MIS 3371 Assignment 3
+
+Github (https://github.com/gmlopez2/Assignment3)
+
+Website Assignment 3 (https://gmlopez2.github.io/Assignment3/)
 -->
 
 <!DOCTYPE html>
@@ -90,6 +96,7 @@ It includes various input fields for personal information, contact details, addr
           <input id="city" name="city" type="text" required minlength="2" maxlength="30">
         </label>
         <div class="error" id="cityErr"></div>
+      
         <!-- STATE -->
         <label>State
           <select id="state" name="state" required>
@@ -213,7 +220,8 @@ It includes various input fields for personal information, contact details, addr
         </label>
         <div class="error" id="confirmPasswordErr"></div>
 
-        <!--  BUTTONS -->
+        <!--  BUTTONS 
+          Allows the validation to start.-->
         <div class="section">
           <input type="reset" value="Reset">
           <input type="button" id="validateBtn" value="Validate">
@@ -221,7 +229,9 @@ It includes various input fields for personal information, contact details, addr
 
     </form>
 
-    <!-- SUMMARY SECTION -->
+    <!-- SUMMARY SECTION 
+     To give you the results that you just displayed previously on the website.
+     -->
     <section class="card" id="summary-section"
       style="display:none; margin-top: 30px; background-color: #f0f8ff; border-left: 4px solid #007bff;">
       <h2> Your Submitted Information</h2>
