@@ -1,21 +1,23 @@
-// Validation rules for each field
+// Validation rules for each field to keep code organized and maintainable, 
+// Also states the message in red below the field when validation fails.
+
 const validationRules = {
-  firstName:       { required: true, pattern: /^[A-Za-z'\-]{1,30}$/, msg: "Letters, apostrophes, dashes only (1-30 chars)" },
-  middleInitial:   { required: false, pattern: /^[A-Za-z]?$/, msg: "Single letter only" },
-  lastName:        { required: true, pattern: /^[A-Za-z'\-]*[2-5]?[A-Za-z'\-]*$/, msg: "Letters, apostrophes, dashes, numbers 2-5" },
-  birthday:        { required: true, type: "date", msg: "Date required and valid" },
-  moveDate:        { required: false, type: "date", msg: "Cannot be in the past" },
-  ssn:             { required: false, pattern: /^\d{3}-\d{2}-\d{4}$/, msg: "Format: XXX-XX-XXXX" },
-  email:           { required: true, type: "email", msg: "Valid email required (name@domain.tld)" },
-  phone:           { required: false, pattern: /^\d{3}-\d{3}-\d{4}$/, msg: "Format: 000-000-0000" },
-  addr1:           { required: true, minLength: 2, maxLength: 30, msg: "2-30 characters required" },
-  addr2:           { required: false, minLength: 2, maxLength: 30, msg: "2-30 characters if provided" },
-  city:            { required: true, minLength: 2, maxLength: 30, msg: "2-30 characters required" },
-  state:           { required: true, msg: "State required" },
-  zip:             { required: true, pattern: /^\d{5}(-\d{4})?$/, msg: "5 digits or ZIP+4 format" },
-  notes:           { required: false, noDoubleQuotes: true, msg: "No double quotes allowed" },
-  userId:          { required: true, pattern: /^[A-Za-z][A-Za-z0-9_-]{4,29}$/, msg: "Start with letter, 5-30 chars, letters/numbers/dash/underscore" },
-  password:        { required: true, password: true, msg: "8-30 chars with uppercase, lowercase, digit, special char" },
+  firstName: { required: true, pattern: /^[A-Za-z'\-]{1,30}$/, msg: "Letters, apostrophes, dashes only (1-30 chars)" },
+  middleInitial: { required: false, pattern: /^[A-Za-z]?$/, msg: "Single letter only" },
+  lastName: { required: true, pattern: /^[A-Za-z'\-]*[2-5]?[A-Za-z'\-]*$/, msg: "Letters, apostrophes, dashes, numbers 2-5" },
+  birthday: { required: true, type: "date", msg: "Date required and valid" },
+  moveDate: { required: true, type: "date", msg: "Cannot be in the past" },
+  ssn: { required: true, pattern: /^\d{3}-\d{2}-\d{4}$/, msg: "Format: XXX-XX-XXXX" },
+  email: { required: true, type: "email", msg: "Valid email required (name@domain.tld)" },
+  phone: { required: true, pattern: /^\d{3}-\d{3}-\d{4}$/, msg: "Format: 000-000-0000" },
+  addr1: { required: true, minLength: 2, maxLength: 30, msg: "2-30 characters required" },
+  addr2: { required: false, minLength: 2, maxLength: 30, msg: "2-30 characters if provided" },
+  city: { required: true, minLength: 2, maxLength: 30, msg: "2-30 characters required" },
+  state: { required: true, msg: "State required" },
+  zip: { required: true, pattern: /^\d{5}(-\d{4})?$/, msg: "5 digits only (Example: XXXXX)" },
+  notes: { required: false, noDoubleQuotes: true, msg: "No double quotes allowed" },
+  userId: { required: true, pattern: /^[A-Za-z][A-Za-z0-9_-]{4,29}$/, msg: "Start with letter, 5-30 chars, letters/numbers/dash/underscore" },
+  password: { required: true, password: true, msg: "8-30 charcters with uppercase, lowercase, digit, special charcter" },
   confirmPassword: { required: true, msg: "Must match password" }
 };
 
@@ -25,7 +27,7 @@ function validate(fieldId, value, rules) {
   if (!rules) return "";
   if (!value && rules.required) return `${fieldId.replace(/([A-Z])/g, ' $1').trim()} is required`;
   if (!value) return "";
-  
+
   if (rules.pattern && !rules.pattern.test(value)) return rules.msg;
   if (rules.minLength && value.length < rules.minLength) return `Minimum ${rules.minLength} characters`;
   if (rules.maxLength && value.length > rules.maxLength) return `Maximum ${rules.maxLength} characters`;
@@ -77,15 +79,15 @@ function autoFormat(field, type) {
   if (type === 'ssn' && value.length > 9) value = value.slice(0, 9);
   if (type === 'phone' && value.length > 10) value = value.slice(0, 10);
   if (type === 'zip' && value.length > 9) value = value.slice(0, 9);
-  
+
   if (type === 'ssn' && value.length >= 5) value = value.slice(0, 3) + '-' + value.slice(3, 5) + '-' + value.slice(5);
   else if (type === 'ssn' && value.length >= 3) value = value.slice(0, 3) + '-' + value.slice(3);
-  
+
   if (type === 'phone' && value.length >= 6) value = value.slice(0, 3) + '-' + value.slice(3, 6) + '-' + value.slice(6);
   else if (type === 'phone' && value.length >= 3) value = value.slice(0, 3) + '-' + value.slice(3);
-  
+
   if (type === 'zip' && value.length > 5) value = value.slice(0, 5) + '-' + value.slice(5);
-  
+
   field.value = value;
 }
 
@@ -98,17 +100,17 @@ function validateForm() {
   Object.entries(validationRules).forEach(([fieldId, rules]) => {
     const field = document.getElementById(fieldId);
     if (!field) return;
-    
+
     let value = field.value;
     if (fieldId === 'email') value = value.toLowerCase();
-    
+
     let error = validate(fieldId, value, rules);
     if (fieldId === 'confirmPassword') {
       const password = document.getElementById('password').value;
       if (!value) error = "Please confirm password";
       else if (password !== value) error = "Passwords do not match";
     }
-    
+
     if (error) {
       displayError(fieldId, error);
       isValid = false;
@@ -156,23 +158,23 @@ function getFormData() {
 function displayFormSummary(formData) {
   const labels = {
     firstName: 'First Name',
-    middleInitial: 'Middle Initial', 
+    middleInitial: 'Middle Initial',
     lastName: 'Last Name',
-    birthday: 'Birthday', 
-    moveDate: 'Move In Date', 
-    ssn: 'SSN', 
+    birthday: 'Birthday',
+    moveDate: 'Move In Date',
+    ssn: 'SSN',
     email: 'Email',
-    phone: 'Phone', 
-    addr1: 'Address Line 1', 
-    addr2: 'Address Line 2', 
+    phone: 'Phone',
+    addr1: 'Address Line 1',
+    addr2: 'Address Line 2',
     city: 'City',
-    state: 'State', 
-    zip: 'Zip', 
-    history: 'Medical History', 
+    state: 'State',
+    zip: 'Zip',
+    history: 'Medical History',
     vaccinated: 'Vaccinated',
-    housing: 'Housing', 
-    salary: 'Salary Range', 
-    notes: 'Notes', 
+    housing: 'Housing',
+    salary: 'Salary Range',
+    notes: 'Notes',
     userId: 'User ID'
   };
 
@@ -183,12 +185,12 @@ function displayFormSummary(formData) {
       if (Array.isArray(value)) displayVal = value.join(', ');
       else if (key === 'salary') displayVal = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
       else if (key === 'password' || key === 'confirmPassword' || key === 'ssn') displayVal = '••••••••';
-      
+
       html += `<tr style="border-bottom: 1px solid #ddd;"><td style="padding: 10px; font-weight: bold; width: 30%;">${labels[key] || key}</td><td style="padding: 10px;">${displayVal}</td></tr>`;
     }
   }
   html += '</table>';
-  
+
   document.getElementById('summary-content').innerHTML = html;
   document.getElementById('summary-section').style.display = 'block';
   document.getElementById('summary-section').scrollIntoView({ behavior: 'smooth' });
@@ -207,18 +209,18 @@ function initializeSalarySlider() {
 }
 
 // Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Set date constraints
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const minBirthday = new Date(today);
   minBirthday.setFullYear(minBirthday.getFullYear() - 120);
-  
+
   document.getElementById('birthday').max = today.toISOString().split('T')[0];
   document.getElementById('birthday').min = minBirthday.toISOString().split('T')[0];
   document.getElementById('moveDate').min = today.toISOString().split('T')[0];
 
-  // Setup salary slider
+  // salary slider
   initializeSalarySlider();
 
   // Real-time validation for all fields
@@ -253,12 +255,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Confirm submit button
+  // submit button
   document.getElementById('confirm-submit-btn')?.addEventListener('click', () => {
     window.location.href = 'thankyou.html';
   });
 
-  // Close summary button
+  // summary button
   document.getElementById('close-summary-btn')?.addEventListener('click', () => {
     document.getElementById('summary-section').style.display = 'none';
   });
